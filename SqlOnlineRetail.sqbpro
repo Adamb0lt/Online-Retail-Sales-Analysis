@@ -1,57 +1,47 @@
-<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:\Users\adwal\OneDrive\Desktop\Professional\DataCamp\SQL\Projects\New folder\BookstoreSales\online+retail\SqlOnlineRetail.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="125"/><column_width id="3" width="1480"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,15:mainSqlOnlineRetail"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="SqlOnlineRetail" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="98"/><column index="2" value="101"/><column index="3" value="300"/><column index="4" value="84"/><column index="5" value="162"/><column index="6" value="88"/><column index="7" value="113"/><column index="8" value="124"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1">/*******
-Author: Adam Walters
-Project: Analysis of BookStore Sales
-
-Dataset: &quot;Online Retail.xlsx&quot; from &quot;https://archive.ics.uci.edu/dataset/352/online+retail&quot;
-Summary of Data: This is a transnational data set which contains all the transactions occurring between 
-01/12/2010 and 09/12/2011 for a UK-based and registered non-store online retail.
-Dataset Characteristics: Multivariate, Sequential, Time-Series
-
-IDE used: SQLite
-*******/
-
-/*** 
-Before analysis could be done on the dataset,
-I had to convert the file to CSV format through utitlizing Python with the following code below
-so that it could be imported into SQLite as a CSV file
-
-Python Code:
-import pandas as pd
-
-#read in the dataset and then create a csv version of the dataset
-OnlineRetail1 = pd.read_excel(&quot;Online Retail.xlsx&quot;)
-OnlineRetail1.to_csv(&quot;SqlOnlineRetail&quot;,index = None, header=True)
-
-Now that the CSV file, &quot;SqlOnlineRetail&quot; has been created, the questions below can now be answered
-***/
-
-/*What is the distribution of order values across all customers in
- the dataset? */
-SELECT CustomerID, SUM(Quantity * UnitPrice) AS TotalOrderValue
-FROM SqlOnlineRetail
-GROUP BY CustomerID
-ORDER BY TotalOrderValue DESC;
-
-
-/*How many unique products has each customer purchased?*/
-SELECT CustomerID, COUNT(DISTINCT StockCode)
-FROM SqlOnlineRetail GROUP BY CustomerID;
-
-/*Which customers have only made a single purchase from the company?*/
-SELECT CustomerID, COUNT(invoiceNo) as Purchase_count
-FROM SqlOnlineRetail 
-GROUP BY customerID HAVING Purchase_count = 1;
-
-/*Which products are most commonly purchased together by customers
- in the dataset? */
- SELECT A.Description as PRODUCT1, B.Description AS PRODUCT2, COUNT(*) AS FREQ
- FROM SqlOnlineRetail AS A 
- INNER JOIN SqlOnlineRetail AS B
-	on A.InvoiceNo = B.InvoiceNo AND A.StockCode &gt; B.StockCode
-	GROUP BY A.Description,B.Description
-	ORDER BY FREQ DESC limit 20;
-	
-
+/*******
+Author: Adam Walters
+Project: Analysis of BookStore Sales
+
+Dataset: "Online Retail.xlsx" from "https://archive.ics.uci.edu/dataset/352/online+retail"
+Summary of Data: This is a transnational data set which contains all the transactions occurring between 
+01/12/2010 and 09/12/2011 for a UK-based and registered non-store online retail.
+Dataset Characteristics: Multivariate, Sequential, Time-Series
+
+IDE used: SQLite
+*******/
+
+
+
+/*What is the distribution of order values across all customers in
+ the dataset? */
+SELECT CustomerID, SUM(Quantity * UnitPrice) AS TotalOrderValue
+FROM SqlOnlineRetail
+GROUP BY CustomerID
+ORDER BY TotalOrderValue DESC;
+
+
+/*How many unique products has each customer purchased?*/
+SELECT CustomerID, COUNT(DISTINCT StockCode)
+FROM SqlOnlineRetail GROUP BY CustomerID;
+
+/*Which customers have only made a single purchase from the company?*/
+SELECT CustomerID, COUNT(invoiceNo) as Purchase_count
+FROM SqlOnlineRetail 
+GROUP BY customerID HAVING Purchase_count = 1;
+
+/*Which products are most commonly purchased together by customers
+ in the dataset? */
+ SELECT A.Description as PRODUCT1, B.Description AS PRODUCT2, COUNT(*) AS FREQ
+ FROM SqlOnlineRetail AS A 
+ INNER JOIN SqlOnlineRetail AS B
+	on A.InvoiceNo = B.InvoiceNo AND A.StockCode > B.StockCode
+	GROUP BY A.Description,B.Description
+	ORDER BY FREQ DESC limit 20;
+
+	
+
+
+
  
 
 
