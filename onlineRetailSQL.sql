@@ -11,32 +11,32 @@ IDE used: SQLite
 *******/
 
 
-
-/*What is the distribution of order values across all customers in
- the dataset? */
+--What is the distribution of order values across all customers in the dataset? 
 SELECT CustomerID, SUM(Quantity * UnitPrice) AS TotalOrderValue
 FROM SqlOnlineRetail
 GROUP BY CustomerID
 ORDER BY TotalOrderValue DESC;
 
 
-/*How many unique products has each customer purchased?*/
+--How many unique products has each customer purchased?
 SELECT CustomerID, COUNT(DISTINCT StockCode)
 FROM SqlOnlineRetail GROUP BY CustomerID;
 
-/*Which customers have only made a single purchase from the company?*/
+--Which customers have only made a single purchase from the company?
 SELECT CustomerID, COUNT(invoiceNo) as Purchase_count
 FROM SqlOnlineRetail 
 GROUP BY customerID HAVING Purchase_count = 1;
 
-/*Which products are most commonly purchased together by customers
- in the dataset? */
+--Which products are most commonly purchased together by customers? in the dataset? 
  SELECT A.Description as PRODUCT1, B.Description AS PRODUCT2, COUNT(*) AS FREQ
  FROM SqlOnlineRetail AS A 
  INNER JOIN SqlOnlineRetail AS B
 	on A.InvoiceNo = B.InvoiceNo AND A.StockCode > B.StockCode
 	GROUP BY A.Description,B.Description
-	ORDER BY FREQ DESC limit 20;
+	ORDER BY FREQ DESC limit 20
+
+
+
 	
 
  
